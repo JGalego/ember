@@ -15,6 +15,13 @@ log_every_n_steps: 10
 accumulate_grad_batches: 1
 compile: false          # wrap encoder/energy submodules with torch.compile
 
+# Checkpointing / resume: periodic saves protect a long run against being
+# interrupted partway (pod pre-emption, OOM, or -- see docs/runpod_guide.md --
+# a pod configured to restart its container whenever the process exits).
+checkpoint_every_n_epochs: 1
+save_top_k: 1           # keep the best `save_top_k` checkpoints by val_loss, plus always a "last.ckpt"
+resume_from: null       # null | "auto" (resume from last.ckpt if present) | an explicit .ckpt path
+
 # Optional experiment tracking. Requires `wandb` extra + `wandb login`;
 # falls back to Lightning's CSVLogger when disabled or unavailable.
 use_wandb: false

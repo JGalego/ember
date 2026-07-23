@@ -77,10 +77,29 @@ Weights & Biases logging is opt-in (`training.use_wandb=true`,
 `training.wandb_project=...`); it falls back to a `CSVLogger` if `wandb`
 isn't installed or you haven't run `wandb login`.
 
-## Checkpoints
+## Checkpoints and resuming
 
-`trainer.save_checkpoint(...)` writes a standard Lightning checkpoint to
-`{checkpoint_dir}/{dataset}-{encoder_kind}-final.ckpt`. Load it with
+Beyond the final save, `scripts/train.py` checkpoints periodically during
+training via a Lightning `ModelCheckpoint` callback, so an interrupted run
+(pod pre-emption, OOM, a crash) doesn't lose everything:
+
+- `training.checkpoint_every_n_epochs` (default `1`) -- how often to save.
+- `training.save_top_k` (default `1`) -- how many best-by-`val_loss`
+  checkpoints to keep, in addition to an always-present `last.ckpt`.
+- These land in `{checkpoint_dir}/{dataset}-{encoder_kind}/`, separate from
+  the final save described below.
+
+To resume a run, add `training.resume_from=auto` (picks up `last.ckpt` in
+that directory if one exists, otherwise starts fresh and prints a note) or
+`training.resume_from=/path/to/some.ckpt` for an exact checkpoint. Resuming
+restores model weights, optimizer state, and epoch count, so training
+continues rather than restarting.
+
+At the very end of `trainer.fit(...)`, `trainer.save_checkpoint(...)`
+additionally writes a standard Lightning checkpoint to
+`{checkpoint_dir}/{dataset}-{encoder_kind}-final.ckpt` -- this is the path
+`scripts/evaluate.py --checkpoint` and `scripts/run_benchmarks.py --checkpoint`
+expect. Load any checkpoint with
 `EBMLightningModule.load_from_checkpoint(path, domain=domain)` (the
 `domain` argument is required since it's excluded from the saved
 hyperparameters -- it's a Python object, not something you'd want

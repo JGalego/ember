@@ -39,9 +39,11 @@ manually via "Run workflow" in the Actions tab).
      the container disk itself is ephemeral.
    - **Container Start Command** (may be under an "Advanced" toggle): the
      image's default `CMD` serves the FastAPI app; for training, override it
-     with something like (**one line, no backslashes** -- see the note below):
+     with something like (**one line, no backslashes** -- see the note below,
+     and see "Troubleshooting: pod keeps re-running the job" for why this
+     ends in `; sleep infinity`):
      ```
-     python scripts/train.py dataset=sudoku training.max_epochs=50 training.accelerator=gpu training.devices=1 training.precision=16 checkpoint_dir=/workspace/checkpoints
+     python scripts/train.py dataset=sudoku training.max_epochs=50 training.accelerator=gpu training.devices=1 training.precision=16 checkpoint_dir=/workspace/checkpoints ; sleep infinity
      ```
    - If the image is private: Console -> **Settings -> Registry
      Credentials** -> add one (name + your GitHub username + a PAT scoped
@@ -69,6 +71,9 @@ No registry/image step -- good for a one-off run.
 4. ```bash
    python scripts/train.py dataset=sudoku training.max_epochs=50 training.accelerator=gpu training.devices=1 training.precision=16
    ```
+   Running this from an interactive terminal doesn't hit the restart-loop
+   issue below (that's specific to a pod's *Container Start Command*), so no
+   `sleep infinity` needed here.
 5. Same persistence caveat as above: attach/use a RunPod Volume for
    checkpoints, or copy them off before terminating the pod.
 
@@ -88,6 +93,15 @@ Two Hydra overrides actually engage the GPU + mixed precision:
 `training.accelerator=gpu training.devices=1` and `training.precision=16`.
 The FSDP/DDP knobs in `configs/training/default.yaml` are for multi-GPU and
 aren't needed for a single-pod run.
+
+A longer run is also more likely to get interrupted (pod pre-emption, OOM,
+a network blip) partway through, so `scripts/train.py` checkpoints
+periodically rather than only at the very end: `training.checkpoint_every_n_epochs`
+(default 1) and `training.save_top_k` (default 1, by `val_loss`) control
+that, and it always keeps a `last.ckpt` alongside the best ones, under
+`{checkpoint_dir}/{dataset}-{encoder_kind}/`. To pick a run back up, add
+`training.resume_from=auto` (uses `last.ckpt` if one exists, otherwise
+starts fresh with a printed note) or point it at an exact checkpoint path.
 
 ## Troubleshooting: `LexerNoViableAltException`
 
@@ -132,3 +146,29 @@ release):
   https://pytorch.org/get-started/locally/ for what's currently available,
   rebuild, and push (the GHCR workflow picks it up automatically on the
   next push to `main`).
+
+## Troubleshooting: pod keeps re-running the training job from scratch
+
+If your logs show `Seed set to 42` and a full, error-free training run
+(ending in `Saved checkpoint to ...`) repeating every minute or so, nothing
+is actually broken -- this is RunPod restarting the pod's container every
+time its main process exits, success or failure alike, because a
+Container Start Command is treated as a persistent process. Since that
+command *is* the one-shot `scripts/train.py` invocation, finishing
+training just gets it relaunched from the top, regenerating the same
+(seeded) dataset and reinitializing the same model every time -- purely
+wasted GPU-hours, not a data or training bug. It'll happen fast if you're
+still on the small default dataset size; it's the same issue on a real,
+longer run too, just on a slower cycle.
+
+Fix: make the container idle instead of exit once training finishes, by
+appending `; sleep infinity` to the Container Start Command (already
+included in the Option 2 example above). Watch the logs for the final
+`Saved checkpoint` line, then stop the pod yourself -- it will no longer
+restart on its own.
+
+If a run *did* get interrupted before you added `sleep infinity` (or for
+any other reason -- OOM, pre-emption), you don't need to start over: add
+`training.resume_from=auto` to the command to pick up from the last
+periodic checkpoint instead of epoch 0 (see "Scaling up for a real run"
+above).

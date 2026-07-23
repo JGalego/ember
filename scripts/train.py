@@ -8,9 +8,12 @@ Examples:
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import hydra
 import lightning.pytorch as pl
 import torch
+from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.loggers import CSVLogger
 from omegaconf import DictConfig, OmegaConf
 from torch.utils.data import DataLoader
@@ -61,6 +64,34 @@ def main(cfg: DictConfig) -> None:
         module.energy = torch.compile(module.energy)
 
     run_name = f"{cfg.dataset.name}-{cfg.model.encoder.kind}"
+    run_ckpt_dir = Path(cfg.checkpoint_dir) / run_name
+
+    resume_path = None
+    resume_cfg = cfg.training.get("resume_from")
+    if resume_cfg:
+        if resume_cfg == "auto":
+            candidate = run_ckpt_dir / "last.ckpt"
+            if candidate.exists():
+                resume_path = str(candidate)
+                print(f"training.resume_from=auto: resuming from {resume_path}")
+            else:
+                print(
+                    f"training.resume_from=auto but no checkpoint found at {candidate}; starting fresh"
+                )
+        else:
+            resume_path = resume_cfg
+            print(f"Resuming from {resume_path}")
+
+    checkpoint_callback = ModelCheckpoint(
+        dirpath=str(run_ckpt_dir),
+        filename="{epoch:03d}-{val_loss:.4f}",
+        every_n_epochs=cfg.training.checkpoint_every_n_epochs,
+        save_top_k=cfg.training.save_top_k,
+        monitor="val_loss",
+        mode="min",
+        save_last=True,
+    )
+
     logger = CSVLogger(save_dir=cfg.checkpoint_dir, name=run_name)
     if cfg.training.use_wandb:
         try:
@@ -83,8 +114,9 @@ def main(cfg: DictConfig) -> None:
         accumulate_grad_batches=cfg.training.accumulate_grad_batches,
         default_root_dir=cfg.checkpoint_dir,
         logger=logger,
+        callbacks=[checkpoint_callback],
     )
-    trainer.fit(module, train_loader, val_loader)
+    trainer.fit(module, train_loader, val_loader, ckpt_path=resume_path)
 
     ckpt_path = f"{cfg.checkpoint_dir}/{run_name}-final.ckpt"
     trainer.save_checkpoint(ckpt_path)
