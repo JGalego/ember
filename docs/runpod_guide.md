@@ -39,11 +39,9 @@ manually via "Run workflow" in the Actions tab).
      the container disk itself is ephemeral.
    - **Container Start Command** (may be under an "Advanced" toggle): the
      image's default `CMD` serves the FastAPI app; for training, override it
-     with something like:
+     with something like (**one line, no backslashes** -- see the note below):
      ```
-     python scripts/train.py dataset=sudoku training.max_epochs=50 \
-       training.accelerator=gpu training.devices=1 training.precision=16-mixed \
-       checkpoint_dir=/workspace/checkpoints
+     python scripts/train.py dataset=sudoku training.max_epochs=50 training.accelerator=gpu training.devices=1 training.precision=16 checkpoint_dir=/workspace/checkpoints
      ```
    - If the image is private: Console -> **Settings -> Registry
      Credentials** -> add one (name + your GitHub username + a PAT scoped
@@ -69,8 +67,7 @@ No registry/image step -- good for a one-off run.
    pip install -e .
    ```
 4. ```bash
-   python scripts/train.py dataset=sudoku training.max_epochs=50 \
-     training.accelerator=gpu training.devices=1 training.precision=16-mixed
+   python scripts/train.py dataset=sudoku training.max_epochs=50 training.accelerator=gpu training.devices=1 training.precision=16
    ```
 5. Same persistence caveat as above: attach/use a RunPod Volume for
    checkpoints, or copy them off before terminating the pod.
@@ -88,7 +85,27 @@ this run. Now that GPU time is available, bump:
 - `training.max_epochs=...` -- more epochs now that each one is cheap.
 
 Two Hydra overrides actually engage the GPU + mixed precision:
-`training.accelerator=gpu training.devices=1` and
-`training.precision=16-mixed`. The FSDP/DDP knobs in
-`configs/training/default.yaml` are for multi-GPU and aren't needed for a
-single-pod run.
+`training.accelerator=gpu training.devices=1` and `training.precision=16`.
+The FSDP/DDP knobs in `configs/training/default.yaml` are for multi-GPU and
+aren't needed for a single-pod run.
+
+## Troubleshooting: `LexerNoViableAltException`
+
+If Hydra fails to start with a stack trace ending in
+`LexerNoViableAltException`, the cause is almost always an **unquoted
+override value that starts with digits and ends in a word**, e.g.
+`training.precision=16-mixed` or `training.precision=bf16-mixed`. Hydra's
+command-line grammar tries to lex the leading digits as a number and then
+can't parse the trailing `-mixed`. Fixes, in order of preference:
+
+- Use the bare-integer shorthand instead, if there is one --
+  `training.precision=16` behaves identically to `"16-mixed"` for
+  Lightning's `Trainer`.
+- Otherwise, quote the value so Hydra treats it as a literal string, e.g.
+  `training.precision=\'bf16-mixed\'` (the escaped single quotes need to
+  survive whatever is invoking the command -- a real shell will pass them
+  through; a UI text field that doesn't go through a shell may not).
+- Also make sure the command is a **single line with no trailing
+  backslashes** -- backslash line-continuation is bash syntax and can leave
+  a stray `\` character in an argument if pasted into a field that doesn't
+  run the command through `bash -c`.
