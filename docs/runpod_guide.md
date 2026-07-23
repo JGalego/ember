@@ -109,3 +109,26 @@ can't parse the trailing `-mixed`. Fixes, in order of preference:
   backslashes** -- backslash line-continuation is bash syntax and can leave
   a stray `\` character in an argument if pasted into a field that doesn't
   run the command through `bash -c`.
+
+## Troubleshooting: `RuntimeError: The NVIDIA driver on your system is too old`
+
+This means the container's PyTorch build was compiled against a CUDA
+runtime newer than the pod's NVIDIA driver supports -- a plain
+`pip install torch` pulls whatever CUDA version PyPI bundles by default,
+which drifts forward over time and can outrun an older (or Community Cloud)
+host's driver. `Dockerfile` now pins torch to an explicit, older CUDA build
+(`--index-url https://download.pytorch.org/whl/cu128`) before installing
+the rest of `requirements.txt`, specifically to avoid this. If you still
+hit it (e.g. a pod with an even older driver than cu128 needs, or the
+`cu128` wheel channel has since been retired for the current torch
+release):
+
+- Check the pod's driver capability against what your image's torch build
+  needs, or just try a different pod / GPU type -- driver versions vary
+  across RunPod's Community Cloud fleet more than on Secure Cloud.
+- If `cu128` wheels are no longer published for the current torch release
+  by the time you read this, drop to an older tag (`cu126`, `cu124`, ...)
+  in the `Dockerfile`'s `pip install torch --index-url ...` line -- check
+  https://pytorch.org/get-started/locally/ for what's currently available,
+  rebuild, and push (the GHCR workflow picks it up automatically on the
+  next push to `main`).
