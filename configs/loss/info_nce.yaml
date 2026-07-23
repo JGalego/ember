@@ -1,0 +1,3 @@
+kind: info_nce
+kwargs:
+  temperature: 0.1

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Lint / type
+.ruff_cache/
+.mypy_cache/
+
+# Hydra outputs
+outputs/
+multirun/
+.hydra/
+
+# Data / checkpoints / logs (generated, not versioned)
+data/
+checkpoints/
+wandb/
+lightning_logs/
+*.ckpt
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

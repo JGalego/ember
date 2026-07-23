@@ -1,0 +1,6 @@
+method: lbfgs
+lr: 1.0
+max_iters: 50
+tol: 1e-5
+patience: 5
+n_starts: 4

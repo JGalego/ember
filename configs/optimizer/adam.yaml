@@ -1,0 +1,9 @@
+# Latent (candidate-solution) optimization settings used at inference time
+# by inference/solve.py -- NOT the training optimizer (that's always Adam,
+# configured directly in the Lightning module via `lr`).
+method: adam
+lr: 0.1
+max_iters: 200
+tol: 1e-4
+patience: 10
+n_starts: 4

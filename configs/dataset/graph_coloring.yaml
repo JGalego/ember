@@ -1,0 +1,9 @@
+name: graph_coloring
+n_train: 2000
+n_val: 200
+seed_train: 1
+seed_val: 2
+params:
+  n_nodes: 12
+  k_colors: 3
+  edge_prob: 0.35

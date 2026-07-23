@@ -1,0 +1,7 @@
+name: sudoku
+n_train: 2000
+n_val: 200
+seed_train: 1
+seed_val: 2
+params:
+  n_remove: 45

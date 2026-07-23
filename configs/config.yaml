@@ -1,0 +1,22 @@
+# Root Hydra config. Override any leaf on the command line, e.g.:
+#   python scripts/train.py dataset=sat model=transformer loss=info_nce optimizer=lbfgs
+defaults:
+  - dataset: sudoku
+  - model: mlp
+  - optimizer: adam
+  - loss: contrastive
+  - training: default
+  - _self_
+
+seed: 42
+
+use_constraint_energy: true
+w_learned: 1.0
+w_constraint: 1.0
+negatives_per_positive: 1
+perturb_noise: 0.5
+lr: 1e-3
+
+# Where generated datasets / checkpoints / hydra run logs go, relative to cwd.
+data_dir: data
+checkpoint_dir: checkpoints

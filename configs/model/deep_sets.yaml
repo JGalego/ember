@@ -1,0 +1,19 @@
+# MLP encoder + Deep Sets energy. `energy.n_elements` must evenly divide the
+# domain's solution_dim, and is domain-specific -- override on the command
+# line to match whichever dataset you're using, e.g.:
+#   python scripts/train.py dataset=sudoku model=deep_sets model.energy.n_elements=81
+#   python scripts/train.py dataset=graph_coloring model=deep_sets model.energy.n_elements=12
+#   python scripts/train.py dataset=sat model=deep_sets model.energy.n_elements=20
+#   python scripts/train.py dataset=maze model=deep_sets model.energy.n_elements=49
+encoder:
+  kind: mlp
+  latent_dim: 64
+  hidden_dims: [256, 256]
+energy:
+  kind: deep_sets
+  n_elements: 81
+  element_hidden: 64
+  rho_hidden: 128
+decoder:
+  kind: mlp
+  hidden_dims: [256, 256]

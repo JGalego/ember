@@ -1,0 +1,6 @@
+method: sgd
+lr: 0.5
+max_iters: 300
+tol: 1e-4
+patience: 15
+n_starts: 4

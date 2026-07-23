@@ -1,0 +1,9 @@
+name: maze
+n_train: 2000
+n_val: 200
+seed_train: 1
+seed_val: 2
+params:
+  height: 7
+  width: 7
+  wall_prob: 0.25

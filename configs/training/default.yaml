@@ -1,0 +1,21 @@
+batch_size: 32
+num_workers: 0
+max_epochs: 5
+lr: 1e-3
+
+# Lightning Trainer passthrough (Step 14 scaling knobs). Defaults are safe for
+# a single CPU/GPU dev box; multi-device values are wired through but not
+# exercised in this repo's own CI (no multi-GPU runner available).
+accelerator: auto      # cpu | gpu | auto
+devices: 1              # int, or e.g. "auto" for all visible devices
+strategy: auto          # auto | ddp | fsdp
+precision: 32-true      # 32-true | 16-mixed | bf16-mixed
+gradient_clip_val: 1.0
+log_every_n_steps: 10
+accumulate_grad_batches: 1
+compile: false          # wrap encoder/energy submodules with torch.compile
+
+# Optional experiment tracking. Requires `wandb` extra + `wandb login`;
+# falls back to Lightning's CSVLogger when disabled or unavailable.
+use_wandb: false
+wandb_project: kona-ebm

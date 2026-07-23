@@ -1,0 +1,3 @@
+kind: margin_ranking
+kwargs:
+  margin: 1.0
