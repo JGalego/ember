@@ -4,11 +4,11 @@ Model weights are demo weights by default: a small MLP encoder/energy/decoder
 initialized from a fixed seed at startup, with the hand-specified constraint
 energy weighted heavily relative to the (untrained) learned energy head, so
 `/solve` returns genuinely useful answers without requiring a trained
-checkpoint first. Point `KONA_EBM_CHECKPOINT_<DOMAIN>` (e.g.
-`KONA_EBM_CHECKPOINT_SUDOKU`) at a Lightning checkpoint produced by
+checkpoint first. Point `EMBER_CHECKPOINT_<DOMAIN>` (e.g.
+`EMBER_CHECKPOINT_SUDOKU`) at a Lightning checkpoint produced by
 `scripts/train.py` to serve trained weights for that domain instead.
 
-Run with: uvicorn kona_ebm.api.main:app --reload
+Run with: uvicorn ember.api.main:app --reload
 """
 
 from __future__ import annotations
@@ -21,16 +21,16 @@ import torch
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from kona_ebm.datasets import available_domains, get_domain
-from kona_ebm.datasets.domain import Domain
-from kona_ebm.inference import optimize_candidate
-from kona_ebm.inference.solve import solve as run_solve
-from kona_ebm.models import build_demo_bundle
+from ember.datasets import available_domains, get_domain
+from ember.datasets.domain import Domain
+from ember.inference import optimize_candidate
+from ember.inference.solve import solve as run_solve
+from ember.models import build_demo_bundle
 
 LATENT_DIM = 32
 
 app = FastAPI(
-    title="kona-ebm API",
+    title="Ember API",
     description=(
         "Research API for an energy-based reasoning framework over constraint-satisfaction "
         "problems, inspired by publicly discussed energy-based modeling (EBM) concepts and "
@@ -47,7 +47,7 @@ class ModelBundle:
         self.domain = domain
         self.encoder, self.energy, self.decoder = build_demo_bundle(domain, latent_dim=LATENT_DIM)
 
-        env_key = f"KONA_EBM_CHECKPOINT_{domain.name.upper()}"
+        env_key = f"EMBER_CHECKPOINT_{domain.name.upper()}"
         ckpt_path = os.environ.get(env_key)
         if ckpt_path:
             self._load_checkpoint(ckpt_path)

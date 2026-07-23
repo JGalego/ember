@@ -27,11 +27,11 @@ from benchmarks.graph_coloring.baselines import greedy_graph_coloring
 from benchmarks.maze.baselines import bfs_optimal_maze, greedy_maze
 from benchmarks.sat.baselines import greedy_sat
 from benchmarks.sudoku.baselines import greedy_sudoku
-from kona_ebm.datasets import get_domain
-from kona_ebm.inference import solve
-from kona_ebm.models import build_demo_bundle
-from kona_ebm.training import EBMLightningModule
-from kona_ebm.training.metrics import SolveRecord
+from ember.datasets import get_domain
+from ember.inference import solve
+from ember.models import build_demo_bundle
+from ember.training import EBMLightningModule
+from ember.training.metrics import SolveRecord
 
 GREEDY_BASELINES = {
     "sudoku": lambda domain, problem: greedy_sudoku(problem),

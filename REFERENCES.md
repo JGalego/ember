@@ -1,6 +1,6 @@
 # References
 
-This project is a research implementation inspired by publicly discussed
+Ember is a research implementation inspired by publicly discussed
 energy-based modeling (EBM) concepts and by public, non-technical
 descriptions of Logical Intelligence's Kona-1. It is an original
 implementation of ideas from the public EBM literature, not a reproduction

@@ -5,7 +5,7 @@ from __future__ import annotations
 import torch
 from torch.utils.data import Dataset
 
-from kona_ebm.datasets.domain import Domain, ProblemInstance
+from ember.datasets.domain import Domain, ProblemInstance
 
 
 class CSPDataset(Dataset):

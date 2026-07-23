@@ -9,8 +9,8 @@ from typing import Any
 
 import torch
 
-from kona_ebm.datasets.domain import Domain
-from kona_ebm.models import (
+from ember.datasets.domain import Domain
+from ember.models import (
     CompositeEnergy,
     build_constraint_energy,
     build_encoder,

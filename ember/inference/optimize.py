@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import torch
 
-from kona_ebm.models.energy_model import CompositeEnergy
-from kona_ebm.models.optimizer import (
+from ember.models.energy_model import CompositeEnergy
+from ember.models.optimizer import (
     EnergyFn,
     LatentOptimizer,
     OptimizationResult,

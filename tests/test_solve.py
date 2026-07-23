@@ -1,9 +1,9 @@
 import torch
 
-from kona_ebm.datasets import get_domain
-from kona_ebm.inference import solve
-from kona_ebm.inference.optimize import optimize_candidate
-from kona_ebm.models import build_demo_bundle
+from ember.datasets import get_domain
+from ember.inference import solve
+from ember.inference.optimize import optimize_candidate
+from ember.models import build_demo_bundle
 
 
 def test_solve_pipeline_returns_well_formed_result():

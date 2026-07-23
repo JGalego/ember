@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from kona_ebm.models.losses import (
+from ember.models.losses import (
     build_loss,
     contrastive_loss,
     hinge_loss,

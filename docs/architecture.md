@@ -96,7 +96,7 @@ to be the same object.
 | `inference/solve.py` | The full pipeline: encode -> multi-start optimize -> decode -> verify -> restart-if-invalid. |
 | `inference/visualize.py` | Energy curves, PCA'd candidate trajectories, optimization "movies". |
 | `benchmarks/` | Greedy / simulated annealing / beam search / transformer baselines, one comparison harness. |
-| `kona_ebm/api/main.py` | FastAPI `/solve`, `/energy`, `/optimize`. |
+| `ember/api/main.py` | FastAPI `/solve`, `/energy`, `/optimize`. |
 
 ## Why a custom GNN instead of PyTorch Geometric
 

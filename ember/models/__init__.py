@@ -5,16 +5,16 @@ configs/model/*.yaml) -- no architecture is hardcoded into the training or
 inference pipelines.
 """
 
-from kona_ebm.models.decoder import Decoder, MLPDecoder, TransformerDecoder, build_decoder
-from kona_ebm.models.demo_bundle import build_demo_bundle
-from kona_ebm.models.encoder import (
+from ember.models.decoder import Decoder, MLPDecoder, TransformerDecoder, build_decoder
+from ember.models.demo_bundle import build_demo_bundle
+from ember.models.encoder import (
     Encoder,
     GNNEncoder,
     MLPEncoder,
     TransformerEncoder,
     build_encoder,
 )
-from kona_ebm.models.energy_model import (
+from ember.models.energy_model import (
     CompositeEnergy,
     ConstraintEnergy,
     DeepSetsEnergy,
@@ -28,14 +28,14 @@ from kona_ebm.models.energy_model import (
     build_constraint_energy,
     build_energy_model,
 )
-from kona_ebm.models.losses import (
+from ember.models.losses import (
     build_loss,
     contrastive_loss,
     hinge_loss,
     info_nce_loss,
     margin_ranking_loss,
 )
-from kona_ebm.models.optimizer import LatentOptimizer, OptimizationResult, multi_start_optimize
+from ember.models.optimizer import LatentOptimizer, OptimizationResult, multi_start_optimize
 
 __all__ = [
     "Encoder",

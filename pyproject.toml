@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "kona-ebm"
+name = "ember"
 version = "0.1.0"
 description = "Research implementation of an energy-based reasoning framework for constraint-satisfaction problems, inspired by publicly discussed energy-based modeling (EBM) concepts."
 readme = "README.md"
@@ -48,7 +48,7 @@ dev = [
 Homepage = "https://github.com/jgalego/energy-based-reasoning"
 
 [tool.setuptools.packages.find]
-include = ["kona_ebm*"]
+include = ["ember*"]
 
 [tool.black]
 line-length = 100

@@ -1,7 +1,7 @@
 services:
   api:
     build: .
-    image: kona-ebm:latest
+    image: ember:latest
     ports:
       - "8000:8000"
     volumes:
@@ -13,7 +13,7 @@ services:
 
   train:
     build: .
-    image: kona-ebm:latest
+    image: ember:latest
     command: ["python", "scripts/train.py", "dataset=sudoku"]
     volumes:
       - ./configs:/app/configs

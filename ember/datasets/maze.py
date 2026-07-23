@@ -16,7 +16,7 @@ from collections import deque
 
 import torch
 
-from kona_ebm.datasets.domain import Domain, ProblemInstance, register_domain
+from ember.datasets.domain import Domain, ProblemInstance, register_domain
 
 Cell = tuple[int, int]
 WallGrid = list[list[int]]

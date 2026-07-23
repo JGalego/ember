@@ -1,8 +1,8 @@
 """Training loop: dataset wrapping, Lightning module, and shared metrics."""
 
-from kona_ebm.training.dataset import CSPDataset, make_dataset
-from kona_ebm.training.metrics import SolveRecord, aggregate
-from kona_ebm.training.trainer import EBMLightningModule, PlainEBMTrainer
+from ember.training.dataset import CSPDataset, make_dataset
+from ember.training.metrics import SolveRecord, aggregate
+from ember.training.trainer import EBMLightningModule, PlainEBMTrainer
 
 __all__ = [
     "CSPDataset",

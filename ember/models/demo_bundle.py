@@ -1,7 +1,7 @@
 """Builds an untrained "demo" encoder/energy/decoder stack for a domain: a
 small MLP encoder/energy/decoder from a fixed seed, with the hand-specified
 constraint energy weighted heavily relative to the (untrained) learned energy
-head. This is what `kona_ebm.api.main` and `scripts/run_benchmarks.py` use
+head. This is what `ember.api.main` and `scripts/run_benchmarks.py` use
 when no trained checkpoint is supplied -- useful for smoke-testing the solver
 pipeline immediately, not a substitute for actually training a model.
 """
@@ -10,10 +10,10 @@ from __future__ import annotations
 
 import torch
 
-from kona_ebm.datasets.domain import Domain
-from kona_ebm.models.decoder import Decoder, build_decoder
-from kona_ebm.models.encoder import Encoder, build_encoder
-from kona_ebm.models.energy_model import (
+from ember.datasets.domain import Domain
+from ember.models.decoder import Decoder, build_decoder
+from ember.models.encoder import Encoder, build_encoder
+from ember.models.energy_model import (
     CompositeEnergy,
     build_constraint_energy,
     build_energy_model,

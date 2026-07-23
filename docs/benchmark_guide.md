@@ -26,7 +26,7 @@ actually judging the learned energy head.
 
 ## Metrics
 
-Defined in `kona_ebm/training/metrics.py`'s `SolveRecord` / `aggregate`:
+Defined in `ember/training/metrics.py`'s `SolveRecord` / `aggregate`:
 
 - **accuracy**: fraction of instances where `Domain.verify` returned `True`.
 - **mean_violations**: average constraint-violation count (0 for a fully

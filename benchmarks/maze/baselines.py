@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import time
 
-from kona_ebm.datasets.maze import MazeDomain
-from kona_ebm.training.metrics import SolveRecord
+from ember.datasets.maze import MazeDomain
+from ember.training.metrics import SolveRecord
 
 
 def greedy_maze(problem: dict, domain: MazeDomain) -> SolveRecord:

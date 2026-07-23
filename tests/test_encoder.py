@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from kona_ebm.models.encoder import GNNEncoder, MLPEncoder, TransformerEncoder, build_encoder
+from ember.models.encoder import GNNEncoder, MLPEncoder, TransformerEncoder, build_encoder
 
 PROBLEM_DIM = 100
 LATENT_DIM = 16

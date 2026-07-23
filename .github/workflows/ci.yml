@@ -28,7 +28,7 @@ jobs:
         run: black --check .
 
       - name: Test (pytest)
-        run: pytest tests/ -q --cov=kona_ebm --cov-report=term-missing
+        run: pytest tests/ -q --cov=ember --cov-report=term-missing
 
   smoke-train:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
           python scripts/train.py \
             dataset=sudoku dataset.n_train=16 dataset.n_val=8 \
             training.max_epochs=1 training.batch_size=8 \
-            checkpoint_dir=/tmp/kona-ebm-ci-ckpt
+            checkpoint_dir=/tmp/ember-ci-ckpt
 
       - name: Tiny benchmark comparison
         run: |

@@ -20,5 +20,5 @@ RUN pip install -e . --no-deps
 EXPOSE 8000
 
 # Default: serve the API. Override the command to run training/benchmarks instead, e.g.:
-#   docker run kona-ebm python scripts/train.py dataset=sudoku
-CMD ["uvicorn", "kona_ebm.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+#   docker run ember python scripts/train.py dataset=sudoku
+CMD ["uvicorn", "ember.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from kona_ebm.models.optimizer import LatentOptimizer, multi_start_optimize
+from ember.models.optimizer import LatentOptimizer, multi_start_optimize
 
 
 def quadratic_energy(z: torch.Tensor) -> torch.Tensor:

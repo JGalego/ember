@@ -13,7 +13,7 @@ import random
 import torch
 import torch.nn.functional as F
 
-from kona_ebm.datasets.domain import Domain, ProblemInstance, register_domain
+from ember.datasets.domain import Domain, ProblemInstance, register_domain
 
 Adjacency = list[list[int]]
 Coloring = list[int]

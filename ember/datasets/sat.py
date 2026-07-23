@@ -19,7 +19,7 @@ import random
 
 import torch
 
-from kona_ebm.datasets.domain import Domain, ProblemInstance, register_domain
+from ember.datasets.domain import Domain, ProblemInstance, register_domain
 
 Clause = list[int]
 CNF = list[Clause]

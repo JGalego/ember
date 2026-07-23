@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import time
 
-from kona_ebm.datasets.sat import CNF, SATDomain
-from kona_ebm.training.metrics import SolveRecord
+from ember.datasets.sat import CNF, SATDomain
+from ember.training.metrics import SolveRecord
 
 
 def _count_satisfied(clauses: CNF, assignment: list[bool], domain: SATDomain) -> int:

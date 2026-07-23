@@ -1,4 +1,4 @@
-"""kona_ebm: a research framework for energy-based reasoning over constraint-satisfaction problems.
+"""Ember: a research framework for energy-based reasoning over constraint-satisfaction problems.
 
 This package is an original research implementation inspired by publicly discussed
 energy-based modeling (EBM) concepts (LeCun et al.) and by public, non-technical

@@ -18,4 +18,4 @@ compile: false          # wrap encoder/energy submodules with torch.compile
 # Optional experiment tracking. Requires `wandb` extra + `wandb login`;
 # falls back to Lightning's CSVLogger when disabled or unavailable.
 use_wandb: false
-wandb_project: kona-ebm
+wandb_project: ember

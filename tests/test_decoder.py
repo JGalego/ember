@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from kona_ebm.models.decoder import MLPDecoder, TransformerDecoder, build_decoder
+from ember.models.decoder import MLPDecoder, TransformerDecoder, build_decoder
 
 SOLUTION_DIM = 64
 LATENT_DIM = 16

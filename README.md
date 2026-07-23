@@ -1,20 +1,17 @@
-# kona-ebm
+# Ember
 
 A research implementation of an **energy-based reasoning framework** for
 constraint-satisfaction problems (Sudoku, SAT, graph coloring, mazes),
 built around iterative energy minimization instead of autoregressive
 decoding.
 
-> **What this is, and isn't.** This project is inspired by publicly
-> discussed energy-based modeling (EBM) concepts -- principally Yann
-> LeCun's EBM tutorial and "A Path Towards Autonomous Machine Intelligence"
-> -- and by public, non-technical descriptions of Logical Intelligence's
-> Kona-1 (a press release and a homepage, cited in `REFERENCES.md`). It is
-> an **original implementation of ideas from the public literature**, not a
-> reproduction of, or reverse-engineering attempt against, Kona-1 or any
-> other proprietary system, and it makes **no claim of architectural
-> equivalence** to any such system. See `REFERENCES.md` for exactly what was
-> and wasn't used as a source.
+> **What this is, and isn't.** Ember is inspired by publicly discussed
+> energy-based modeling (EBM) concepts -- principally Yann LeCun's EBM
+> tutorial and "A Path Towards Autonomous Machine Intelligence" -- and, in
+> part, by public descriptions of Logical Intelligence's Kona-1. It's an
+> original implementation of ideas from the public EBM literature, not a
+> reproduction of, or claim of equivalence to, Kona-1 or any other
+> proprietary system. See `REFERENCES.md` for sources.
 
 ## The idea
 
@@ -66,11 +63,11 @@ box, not a training cluster:
   `configs/training/default.yaml` and `scripts/train.py`, but this repo's
   own CI only exercises the single-device CPU path -- multi-GPU scaling
   hasn't been benchmarked here.
-- The FastAPI service (`kona_ebm/api/main.py`) serves **untrained demo
+- The FastAPI service (`ember/api/main.py`) serves **untrained demo
   weights** by default (a fixed-seed MLP stack with the constraint energy
   weighted heavily), which is enough to solve small real instances out of
   the box -- point it at a real checkpoint via
-  `KONA_EBM_CHECKPOINT_<DOMAIN>` for trained weights.
+  `EMBER_CHECKPOINT_<DOMAIN>` for trained weights.
 
 ## Quickstart
 
@@ -90,9 +87,9 @@ python scripts/evaluate.py --domain sudoku --checkpoint checkpoints/sudoku-mlp-f
 # compare the EBM solver against greedy / simulated annealing / beam search / a transformer baseline
 python scripts/run_benchmarks.py --domain sudoku --n_test 20
 
-# serve the API (untrained demo weights unless KONA_EBM_CHECKPOINT_SUDOKU etc. is set)
+# serve the API (untrained demo weights unless EMBER_CHECKPOINT_SUDOKU etc. is set)
 python scripts/serve_api.py --port 8000
-# or: uvicorn kona_ebm.api.main:app --reload
+# or: uvicorn ember.api.main:app --reload
 
 # run the test suite
 pytest tests/ -q
@@ -108,7 +105,7 @@ docker compose run train   # runs scripts/train.py dataset=sudoku inside the con
 ## Project layout
 
 ```
-kona_ebm/
+ember/
 ├── datasets/       # Domain interface + sudoku/sat/graph_coloring/maze generators
 ├── models/         # encoder.py, energy_model.py, decoder.py, optimizer.py, losses.py
 ├── training/       # dataset.py, trainer.py (Lightning module), metrics.py

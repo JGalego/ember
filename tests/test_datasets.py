@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from kona_ebm.datasets import available_domains, get_domain
+from ember.datasets import available_domains, get_domain
 
 
 @pytest.mark.parametrize("domain_name", available_domains())

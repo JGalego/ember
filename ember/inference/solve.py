@@ -10,11 +10,11 @@ from typing import Any
 
 import torch
 
-from kona_ebm.datasets.domain import Domain
-from kona_ebm.models.decoder import Decoder
-from kona_ebm.models.encoder import Encoder
-from kona_ebm.models.energy_model import CompositeEnergy
-from kona_ebm.models.optimizer import LatentOptimizer, multi_start_optimize
+from ember.datasets.domain import Domain
+from ember.models.decoder import Decoder
+from ember.models.encoder import Encoder
+from ember.models.energy_model import CompositeEnergy
+from ember.models.optimizer import LatentOptimizer, multi_start_optimize
 
 from .optimize import make_energy_fn
 

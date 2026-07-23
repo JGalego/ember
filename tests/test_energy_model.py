@@ -1,8 +1,8 @@
 import pytest
 import torch
 
-from kona_ebm.datasets import available_domains, get_domain
-from kona_ebm.models.energy_model import (
+from ember.datasets import available_domains, get_domain
+from ember.models.energy_model import (
     CompositeEnergy,
     DeepSetsEnergy,
     build_constraint_energy,

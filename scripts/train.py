@@ -15,8 +15,8 @@ from lightning.pytorch.loggers import CSVLogger
 from omegaconf import DictConfig, OmegaConf
 from torch.utils.data import DataLoader
 
-from kona_ebm.datasets import get_domain
-from kona_ebm.training import EBMLightningModule, make_dataset
+from ember.datasets import get_domain
+from ember.training import EBMLightningModule, make_dataset
 
 
 @hydra.main(version_base=None, config_path="../configs", config_name="config")

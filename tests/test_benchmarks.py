@@ -15,8 +15,8 @@ from benchmarks.graph_coloring.baselines import greedy_graph_coloring
 from benchmarks.maze.baselines import bfs_optimal_maze, greedy_maze
 from benchmarks.sat.baselines import greedy_sat
 from benchmarks.sudoku.baselines import greedy_sudoku
-from kona_ebm.datasets import get_domain
-from kona_ebm.training.metrics import SolveRecord, aggregate
+from ember.datasets import get_domain
+from ember.training.metrics import SolveRecord, aggregate
 
 
 def test_greedy_sudoku_returns_solve_record():

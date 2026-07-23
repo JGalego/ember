@@ -16,11 +16,11 @@ black --check .
 
 ## Adding a new CSP domain
 
-Implement the `Domain` ABC (`kona_ebm/datasets/domain.py`) in a new module
-under `kona_ebm/datasets/`:
+Implement the `Domain` ABC (`ember/datasets/domain.py`) in a new module
+under `ember/datasets/`:
 
 ```python
-from kona_ebm.datasets.domain import Domain, ProblemInstance, register_domain
+from ember.datasets.domain import Domain, ProblemInstance, register_domain
 
 @register_domain
 class MyDomain(Domain):
@@ -41,9 +41,9 @@ class MyDomain(Domain):
 
 Then, to make it a full citizen of the repo:
 
-1. Import it in `kona_ebm/datasets/__init__.py` (so `@register_domain` runs
+1. Import it in `ember/datasets/__init__.py` (so `@register_domain` runs
    and `get_domain("my_domain")` works).
-2. Add `ConstraintEnergy` support in `kona_ebm/models/energy_model.py`:
+2. Add `ConstraintEnergy` support in `ember/models/energy_model.py`:
    a differentiable penalty class, plus a branch in `build_constraint_energy`.
 3. Add a Hydra dataset config: `configs/dataset/my_domain.yaml`.
 4. (Optional but recommended) add a greedy baseline under

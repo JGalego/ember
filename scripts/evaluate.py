@@ -10,10 +10,10 @@ from __future__ import annotations
 
 import argparse
 
-from kona_ebm.datasets import get_domain
-from kona_ebm.inference import solve
-from kona_ebm.training import EBMLightningModule
-from kona_ebm.training.metrics import SolveRecord, aggregate
+from ember.datasets import get_domain
+from ember.inference import solve
+from ember.training import EBMLightningModule
+from ember.training.metrics import SolveRecord, aggregate
 
 
 def main() -> None:

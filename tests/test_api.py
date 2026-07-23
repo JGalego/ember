@@ -4,8 +4,8 @@ pytest.importorskip("httpx")  # FastAPI's TestClient needs httpx installed
 
 from fastapi.testclient import TestClient
 
-from kona_ebm.api.main import app
-from kona_ebm.datasets import get_domain
+from ember.api.main import app
+from ember.datasets import get_domain
 
 
 @pytest.fixture(scope="module")

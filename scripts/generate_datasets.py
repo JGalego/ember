@@ -16,7 +16,7 @@ import argparse
 import json
 from pathlib import Path
 
-from kona_ebm.datasets import get_domain
+from ember.datasets import get_domain
 
 
 def main() -> None:

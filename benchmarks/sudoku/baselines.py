@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import time
 
-from kona_ebm.datasets.sudoku import Grid, _is_valid
-from kona_ebm.training.metrics import SolveRecord
+from ember.datasets.sudoku import Grid, _is_valid
+from ember.training.metrics import SolveRecord
 
 
 def greedy_sudoku(problem: Grid) -> SolveRecord:
@@ -27,7 +27,7 @@ def greedy_sudoku(problem: Grid) -> SolveRecord:
             else:
                 grid[r][c] = 1  # no valid digit left; place a placeholder and keep going
 
-    from kona_ebm.datasets.sudoku import SudokuDomain
+    from ember.datasets.sudoku import SudokuDomain
 
     _, violations = SudokuDomain().verify(problem, grid)
     return SolveRecord(

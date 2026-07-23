@@ -9,8 +9,8 @@ from __future__ import annotations
 
 import time
 
-from kona_ebm.datasets.graph_coloring import Adjacency, GraphColoringDomain
-from kona_ebm.training.metrics import SolveRecord
+from ember.datasets.graph_coloring import Adjacency, GraphColoringDomain
+from ember.training.metrics import SolveRecord
 
 
 def greedy_graph_coloring(problem: Adjacency, domain: GraphColoringDomain) -> SolveRecord:

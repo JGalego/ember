@@ -3,9 +3,9 @@
 ## The solver
 
 ```python
-from kona_ebm.datasets import get_domain
-from kona_ebm.models import build_demo_bundle  # or load a trained checkpoint
-from kona_ebm.inference import solve
+from ember.datasets import get_domain
+from ember.models import build_demo_bundle  # or load a trained checkpoint
+from ember.inference import solve
 
 domain = get_domain("sudoku", n_remove=45)
 instance = domain.generate(1, seed=0)[0]
@@ -17,7 +17,7 @@ print(result.valid, result.violations, result.final_energy, result.n_iters)
 print(result.solution)  # a 9x9 grid of digits
 ```
 
-`solve()` (`kona_ebm/inference/solve.py`) runs the full Step 9 pipeline:
+`solve()` (`ember/inference/solve.py`) runs the full Step 9 pipeline:
 
 1. **Encode**: `latent = encoder(problem)`.
 2. **Optimize** (Step 7 + Step 10): `n_starts` random initializations, each
@@ -53,12 +53,12 @@ converges to something invalid.
 
 ## Lower-level building blocks
 
-`kona_ebm/inference/optimize.py` exposes `optimize_candidate` and
+`ember/inference/optimize.py` exposes `optimize_candidate` and
 `optimize_multi_start` if you want the optimization step without the full
 solve/decode/verify/restart pipeline (e.g. for visualization or debugging):
 
 ```python
-from kona_ebm.inference.optimize import optimize_candidate
+from ember.inference.optimize import optimize_candidate
 
 problem_t = domain.encode_problem(instance.problem).unsqueeze(0)
 latent = encoder(problem_t)
@@ -70,7 +70,7 @@ result = optimize_candidate(energy, problem_t, latent, init, method="adam", lr=0
 ## Visualizing an optimization run
 
 ```python
-from kona_ebm.inference import plot_energy_curve, plot_latent_trajectory, save_optimization_movie
+from ember.inference import plot_energy_curve, plot_latent_trajectory, save_optimization_movie
 
 plot_energy_curve(result.energy_history, "energy.png")
 plot_latent_trajectory(result.trajectory, "trajectory.png")       # PCA-projected to 2D
@@ -83,7 +83,7 @@ not a semantic rendering of e.g. Sudoku digits or graph edges.
 
 ## Serving over HTTP
 
-See the API section of the main `README.md` and `kona_ebm/api/main.py`'s
+See the API section of the main `README.md` and `ember/api/main.py`'s
 docstring: `POST /solve`, `POST /energy`, `POST /optimize`, all accepting a
 `domain` name plus domain-specific raw JSON (a 9x9 grid for Sudoku, a
 clause list for SAT, an adjacency matrix for graph coloring, a

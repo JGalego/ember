@@ -47,7 +47,7 @@ Most combinations just work. Two exceptions:
 
 ## What actually gets trained
 
-`EBMLightningModule` (`kona_ebm/training/trainer.py`) wraps an `Encoder` and
+`EBMLightningModule` (`ember/training/trainer.py`) wraps an `Encoder` and
 a `CompositeEnergy` (learned + optional constraint energy). Each training
 step:
 

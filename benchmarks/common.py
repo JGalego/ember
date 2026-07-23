@@ -18,8 +18,8 @@ from collections.abc import Callable
 import torch
 from torch import nn
 
-from kona_ebm.datasets.domain import Domain
-from kona_ebm.training.metrics import SolveRecord, aggregate
+from ember.datasets.domain import Domain
+from ember.training.metrics import SolveRecord, aggregate
 
 
 def simulated_annealing(
