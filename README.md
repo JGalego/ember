@@ -116,7 +116,7 @@ configs/            # Hydra configs: dataset/, model/, optimizer/, loss/, traini
 benchmarks/         # baselines (greedy, SA, beam search, transformer) per domain + shared harness
 scripts/            # generate_datasets.py, train.py, evaluate.py, run_benchmarks.py, serve_api.py
 tests/              # pytest suite covering datasets/encoder/decoder/energy/optimizer/losses/solve/benchmarks/api
-docs/               # architecture.md, training_guide.md, inference_guide.md, benchmark_guide.md
+docs/               # architecture.md, training_guide.md, inference_guide.md, benchmark_guide.md, runpod_guide.md
 ```
 
 Every model component (encoder kind, energy kind, decoder kind, loss,
@@ -134,6 +134,9 @@ overrides.
   multi-start, self-correction, the solver API
 - [`docs/benchmark_guide.md`](docs/benchmark_guide.md) -- baselines, metrics,
   how to run comparisons
+- [`docs/runpod_guide.md`](docs/runpod_guide.md) -- training on a rented
+  single GPU (RunPod), GHCR image publishing, scaling configs up from the
+  CPU-sized defaults
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) -- adding a new CSP domain, code style,
   running tests
 - [`REFERENCES.md`](REFERENCES.md) -- full citations
