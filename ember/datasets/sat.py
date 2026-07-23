@@ -19,7 +19,13 @@ import random
 
 import torch
 
-from ember.datasets.domain import Domain, ProblemInstance, register_domain
+from ember.datasets.domain import (
+    Domain,
+    ProblemInstance,
+    randn_like,
+    randperm_like,
+    register_domain,
+)
 
 Clause = list[int]
 CNF = list[Clause]
@@ -98,7 +104,7 @@ class SATDomain(Domain):
     ) -> torch.Tensor:
         x = solution_tensor.clone()
         n_flip = max(1, int(0.2 * self.solution_dim))
-        idx = torch.randperm(self.solution_dim, generator=generator)[:n_flip]
+        idx = randperm_like(self.solution_dim, x, generator=generator)[:n_flip]
         x[idx] = -x[idx]
-        x = x + noise * 0.2 * torch.randn(x.shape, generator=generator)
+        x = x + noise * 0.2 * randn_like(x, generator=generator)
         return x.clamp(-3.0, 3.0)

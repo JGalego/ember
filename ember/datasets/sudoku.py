@@ -16,7 +16,13 @@ import random
 import torch
 import torch.nn.functional as F
 
-from ember.datasets.domain import Domain, ProblemInstance, register_domain
+from ember.datasets.domain import (
+    Domain,
+    ProblemInstance,
+    randn_like,
+    randperm_like,
+    register_domain,
+)
 
 Grid = list[list[int]]
 
@@ -156,8 +162,8 @@ class SudokuDomain(Domain):
     ) -> torch.Tensor:
         x = solution_tensor.clone().reshape(81, 9)
         n_swap = max(2, int(0.15 * 81))
-        idx = torch.randperm(81, generator=generator)[:n_swap]
-        perm = idx[torch.randperm(len(idx), generator=generator)]
+        idx = randperm_like(81, x, generator=generator)[:n_swap]
+        perm = idx[randperm_like(len(idx), x, generator=generator)]
         x[idx] = x[perm].clone()
-        x = x + noise * 0.3 * torch.randn(x.shape, generator=generator)
+        x = x + noise * 0.3 * randn_like(x, generator=generator)
         return x.reshape(-1)

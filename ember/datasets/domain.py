@@ -78,8 +78,35 @@ class Domain(ABC):
         Domains with structured solution spaces (e.g. one-hot blocks) may override
         this to produce more informative negatives (e.g. swapping two entries).
         """
-        noise_t = torch.randn(solution_tensor.shape, generator=generator)
+        noise_t = randn_like(solution_tensor, generator=generator)
         return (solution_tensor + noise * noise_t).clamp(-4.0, 4.0)
+
+
+def randn_like(reference: torch.Tensor, generator: torch.Generator | None = None) -> torch.Tensor:
+    """`torch.randn` with `reference`'s shape and device.
+
+    During GPU training, `perturb` is called directly on batch tensors
+    Lightning has already moved to `cuda`, but a bare `torch.randn(...)`
+    defaults to CPU -- adding the two then fails with "Expected all tensors
+    to be on the same device". `generator` is only passed through when its
+    device matches `reference`'s (a CPU generator can't drive CUDA tensor
+    creation); otherwise generation silently falls back to the ambient RNG
+    state on that device rather than raising.
+    """
+    kwargs: dict[str, Any] = {"device": reference.device}
+    if generator is not None and generator.device == reference.device:
+        kwargs["generator"] = generator
+    return torch.randn(reference.shape, **kwargs)
+
+
+def randperm_like(
+    n: int, reference: torch.Tensor, generator: torch.Generator | None = None
+) -> torch.Tensor:
+    """`torch.randperm(n)` placed on the same device as `reference` -- see `randn_like`."""
+    kwargs: dict[str, Any] = {"device": reference.device}
+    if generator is not None and generator.device == reference.device:
+        kwargs["generator"] = generator
+    return torch.randperm(n, **kwargs)
 
 
 _REGISTRY: dict[str, type[Domain]] = {}
