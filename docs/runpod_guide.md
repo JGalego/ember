@@ -27,24 +27,31 @@ manually via "Run workflow" in the Actions tab).
    `GITHUB_TOKEN` default to *private* even on a public repo. Either:
    - Go to `https://github.com/<owner>/<repo>/pkgs/container/<repo>` ->
      Package settings -> Danger Zone -> Change visibility -> **Public**, or
-   - Keep it private and add a registry credential in RunPod instead (RunPod
-     pod creation has a "Container Registry Credentials" section -- add a
-     GHCR Personal Access Token there with `read:packages` scope).
-3. **Deploy the pod.** RunPod console -> Pods -> Deploy -> pick a GPU (RTX
-   4090 / A40 / A10) -> under image source choose a **custom image** rather
-   than a template -> image: `ghcr.io/<owner>/<repo>:latest`.
-   - Container disk: ~20 GB is enough for the image + a modest dataset.
-   - Attach a **RunPod Volume** (e.g. mounted at `/workspace`) if you want
-     checkpoints/datasets to survive the pod being stopped -- the container
-     disk itself is ephemeral.
-4. **Override the start command.** The image's default `CMD` serves the
-   FastAPI app; for training, set the pod's "Container Start Command" to
-   something like:
-   ```
-   python scripts/train.py dataset=sudoku training.max_epochs=50 \
-     training.accelerator=gpu training.devices=1 training.precision=16-mixed \
-     checkpoint_dir=/workspace/checkpoints
-   ```
+   - Keep it private and add a registry credential in RunPod instead (see
+     step 3 below -- Settings -> Registry Credentials).
+3. **Create a Template pointing at the image.** RunPod deploys pods *from
+   Templates* -- there's no separate "custom image" toggle at deploy time.
+   Console -> **Templates** -> **New Template**:
+   - **Container Image**: `ghcr.io/<owner>/<repo>:latest`
+   - **Container Disk**: ~20 GB is enough for the image + a modest dataset.
+   - **Volume Disk** + **Volume Mount Path** (e.g. `/workspace`): attach a
+     volume if you want checkpoints/datasets to survive the pod stopping --
+     the container disk itself is ephemeral.
+   - **Container Start Command** (may be under an "Advanced" toggle): the
+     image's default `CMD` serves the FastAPI app; for training, override it
+     with something like:
+     ```
+     python scripts/train.py dataset=sudoku training.max_epochs=50 \
+       training.accelerator=gpu training.devices=1 training.precision=16-mixed \
+       checkpoint_dir=/workspace/checkpoints
+     ```
+   - If the image is private: Console -> **Settings -> Registry
+     Credentials** -> add one (name + your GitHub username + a PAT scoped
+     `read:packages`), then select that credential in the template.
+   - Save the template.
+4. **Deploy from that template.** Pods -> Deploy -> pick a GPU (RTX 4090 /
+   A40 / A10) -> in the template picker, search for the template you just
+   created (it shows up under "My Templates", not the official RunPod list).
 5. **Watch it run.** Tail logs from the RunPod console. When training
    finishes, pull the checkpoint off (RunPod's file browser, `scp`, or push
    it to S3/GCS from inside the pod) before you terminate -- GPU time bills
